@@ -6,41 +6,45 @@ import com.iiita.placementportal.entity.User;
 import com.iiita.placementportal.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
+import java.util.Optional;
 
 @RestController
+
 public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostConstruct
-    public void initRolesAndUsers(){
-        userService.initRolesAndUser();
-    }
+//    @PostConstruct
+//    public void initRolesAndUsers(){
+////        userService.initRolesAndUser();
+//    }
 
     @PostMapping("/registerNewUser")
-    public User registerNewUser(@RequestBody RegisterUserRequest request){
-        return userService.registerNewUser(request);
+    public ResponseEntity registerNewUser(@RequestBody RegisterUserRequest request){
+            return ResponseEntity.status(HttpStatus.CREATED).body(userService.registerNewUser(request));
     }
 
     @GetMapping("/forAdmin")
     @PreAuthorize("hasRole('ADMIN')")
     public String forAdmin(){
-        return "ADMIN AREA";
+        return "This API is only accessible to admin role";
     }
 
-    @GetMapping("/forCompany")
-    @PreAuthorize("hasRole('COMPANY')")
+    @GetMapping("/forModerator")
+    @PreAuthorize("hasRole('MODERATOR')")
     public String forCompany(){
-        return "COMPANY AREA";
+        return "This API is only accessible to moderator role";
     }
 
     @GetMapping("/forStudent")
     @PreAuthorize("hasRole('STUDENT')")
     public String forStudent(){
-        return "STUDENT AREA";
+        return "This API is only accessible to student role";
     }
 }

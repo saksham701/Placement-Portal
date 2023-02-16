@@ -25,48 +25,37 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
     public User registerNewUser(RegisterUserRequest request){
+
         Optional<User> userFromDb = userDao.findById(request.getEmail());
         Boolean isNewUser = !userFromDb.isPresent();
-
-        if(isNewUser){
-            User newUser = new User();
-            newUser.setFirstName(request.getFirstName());
-            newUser.setPassword(getEncodedPassword(request.getPassword()));
-            newUser.setLastName(request.getLastName());
-            newUser.setEmail(request.getEmail());
-            newUser.setRole(new HashSet<>());
-            newUser.getRole().add(new Role(request.getRoleName()));
-            return userDao.save(newUser);
+        if(isNewUser ){
+            return userDao.save(getNewUserFromRequest(request));
         }
-        else{
-            userFromDb.get().getRole().add(new Role(request.getRoleName()));
-            return userDao.save(userFromDb.get());
-        }
+        return userFromDb.get();
 
     }
 
     public void initRolesAndUser(){
-        Role adminRole = new Role();
-        adminRole.setRoleName("ADMIN");
-        roleDao.save(adminRole);
-
-        Role companyRole = new Role();
-        companyRole.setRoleName("COMPANY");
-        roleDao.save(companyRole);
-
-        Role studentRole = new Role();
-        studentRole.setRoleName("STUDENT");
-        roleDao.save(studentRole);
-
-        User adminUser = new User();
-        adminUser.setFirstName("admin");
-        adminUser.setLastName("admin");
-        adminUser.setEmail("admin@gmail.com");
-        adminUser.setPassword(getEncodedPassword("admin@pass"));
-        Set<Role> adminRoles = new HashSet<>();
-        adminRoles.add(adminRole);
-        adminUser.setRole(adminRoles);
-        userDao.save(adminUser);
+//        Role adminRole = new Role();
+//        adminRole.setRoleName("ADMIN");
+//        roleDao.save(adminRole);
+//
+//        Role companyRole = new Role();
+//        companyRole.setRoleName("COMPANY");
+//        roleDao.save(companyRole);
+//
+//        Role studentRole = new Role();
+//        studentRole.setRoleName("STUDENT");
+//        roleDao.save(studentRole);
+//
+//        User adminUser = new User();
+//        adminUser.setName("admin");
+//        adminUser.setEmail("admin@gmail.com");
+//        adminUser.setPassword(getEncodedPassword("admin@pass"));
+//        Set<Role> adminRoles = new HashSet<>();
+//        adminRoles.add(adminRole);
+//        adminUser.setRole(adminRoles);
+//        userDao.save(adminUser);
 
 //        User companyUser = new User();
 //        companyUser.setFirstName("tcs");
@@ -88,6 +77,15 @@ public class UserService {
 //        studentUser.setRole(studentRoles);
 //        userDao.save(studentUser);
 
+    }
+    public User getNewUserFromRequest(RegisterUserRequest request){
+        User newUser = new User();
+        newUser.setName(request.getName());
+        newUser.setPassword(getEncodedPassword(request.getPassword()));
+        newUser.setEmail(request.getEmail());
+        newUser.setRole(new HashSet<>());
+        newUser.getRole().add(new Role(request.getRoleName()));
+        return newUser;
     }
 
     public String getEncodedPassword(String password){

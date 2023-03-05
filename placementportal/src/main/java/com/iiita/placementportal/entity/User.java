@@ -4,18 +4,14 @@ package com.iiita.placementportal.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
-import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @NoArgsConstructor
@@ -45,4 +41,10 @@ public class User{
 
     @OneToOne(cascade = CascadeType.ALL)
     private Resume resume;
+
+    @OneToMany(mappedBy = "user")
+    private List<JobOpening> postedJobOpenings = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<JobApplication> jobApplications = new ArrayList<>();
 }

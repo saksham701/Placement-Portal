@@ -1,5 +1,6 @@
 package com.iiita.placementportal.controller;
 
+import com.iiita.placementportal.dtos.UserDto;
 import com.iiita.placementportal.entity.RegisterUserRequest;
 import com.iiita.placementportal.entity.Role;
 import com.iiita.placementportal.entity.User;
@@ -12,39 +13,66 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
-
+@RequestMapping("/user")
 public class UserController {
     @Autowired
     private UserService userService;
 
-//    @PostConstruct
-//    public void initRolesAndUsers(){
-////        userService.initRolesAndUser();
+
+    //CREATE
+    @PostMapping("/")
+    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto){
+        UserDto createdUserDto = this.userService.createUser(userDto);
+        return new ResponseEntity<>(createdUserDto,HttpStatus.CREATED);
+    }
+
+    //UPDATE
+    @PutMapping("/{user_email}")
+    public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto,@PathVariable("user_email") String email){
+        UserDto updatedUserDto = this.userService.updateUser(userDto,email);
+        return new ResponseEntity<>(updatedUserDto,HttpStatus.OK);
+    }
+
+    //DELETE
+    @DeleteMapping("/{user_email}")
+    public ResponseEntity<?> deleteUser(@PathVariable("user_email") String email){
+        this.userService.deleteUser(email);
+        return ResponseEntity.ok().build();
+    }
+
+    //GET single user
+    @GetMapping("/{user_email}")
+    public ResponseEntity<UserDto> getSingleUser(@PathVariable("user_email") String email){
+        UserDto singleUserDto = this.userService.getSingleUser(email);
+        return new ResponseEntity<>(singleUserDto,HttpStatus.OK);
+    }
+
+    //GET all users
+    @GetMapping("/all")
+    public ResponseEntity<List<UserDto>> getAllUsers(){
+        List<UserDto> allUsersDto = this.userService.getAllUsers();
+        return new ResponseEntity<>(allUsersDto,HttpStatus.OK);
+    }
+
+//    @GetMapping("/forAdmin")
+//    @PreAuthorize("hasRole('ADMIN')")
+//    public String forAdmin(){
+//        return "This API is only accessible to admin role";
 //    }
-
-    @PostMapping("/registerNewUser")
-    public ResponseEntity registerNewUser(@RequestBody RegisterUserRequest request){
-            return ResponseEntity.status(HttpStatus.CREATED).body(userService.registerNewUser(request));
-    }
-
-    @GetMapping("/forAdmin")
-    @PreAuthorize("hasRole('ADMIN')")
-    public String forAdmin(){
-        return "This API is only accessible to admin role";
-    }
-
-    @GetMapping("/forModerator")
-    @PreAuthorize("hasRole('MODERATOR')")
-    public String forCompany(){
-        return "This API is only accessible to moderator role";
-    }
-
-    @GetMapping("/forStudent")
-    @PreAuthorize("hasRole('STUDENT')")
-    public String forStudent(){
-        return "This API is only accessible to student role";
-    }
+//
+//    @GetMapping("/forModerator")
+//    @PreAuthorize("hasRole('MODERATOR')")
+//    public String forCompany(){
+//        return "This API is only accessible to moderator role";
+//    }
+//
+//    @GetMapping("/forStudent")
+//    @PreAuthorize("hasRole('STUDENT')")
+//    public String forStudent(){
+//        return "This API is only accessible to student role";
+//    }
 }

@@ -5,12 +5,14 @@ import com.iiita.placementportal.entity.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
-public class RoleService {
-    @Autowired
-    private RoleDao roleDao;
+import java.util.List;
 
-    public Role createNewRole(Role role){
-        return roleDao.save(role);
-    }
+@Service
+public interface RoleService {
+
+    Role createRole(Role role);
+
+    void deleteRole(String roleName);
+
+    List<Role> getAllRoles();
 }

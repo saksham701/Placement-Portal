@@ -1,8 +1,6 @@
 package com.iiita.placementportal.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -12,7 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Company {
@@ -24,5 +23,4 @@ public class Company {
 
     @OneToMany(mappedBy = "company")
     private List<JobOpening> companyOpenings = new ArrayList<>();
-
 }

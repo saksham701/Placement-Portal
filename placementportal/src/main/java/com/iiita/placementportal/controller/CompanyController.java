@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -18,13 +19,13 @@ public class CompanyController {
     private CompanyService companyService;
 
     @PostMapping("/")
-    public ResponseEntity<CompanyDto> createCompany(@RequestBody CompanyDto companyDto){
+    public ResponseEntity<CompanyDto> createCompany(@RequestBody @Valid CompanyDto companyDto){
         CompanyDto createdCompanyDto = this.companyService.createCompany(companyDto);
         return new ResponseEntity<>(createdCompanyDto, HttpStatus.CREATED);
     }
 
     @PutMapping("/{company_id}")
-    public ResponseEntity<CompanyDto> updateCompany(@RequestBody CompanyDto companyDto, @PathVariable("company_id") Long companyId){
+    public ResponseEntity<CompanyDto> updateCompany(@RequestBody @Valid CompanyDto companyDto, @PathVariable("company_id") Long companyId){
         CompanyDto updatedCompanyDto = this.companyService.updateCompany(companyDto,companyId);
         return new ResponseEntity<>(updatedCompanyDto,HttpStatus.OK);
     }

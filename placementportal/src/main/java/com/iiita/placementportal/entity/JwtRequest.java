@@ -1,7 +1,13 @@
 package com.iiita.placementportal.entity;
 
-public class JwtRequest {
+import org.hibernate.validator.constraints.Length;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
+
+public class JwtRequest {
+    @Email
     private String userName;
 
     public JwtRequest(String userName, String password) {
@@ -25,6 +31,8 @@ public class JwtRequest {
         this.password = password;
     }
 
+    @NotEmpty
+    @Size(min=6, message = "Password must be atleast 6 characters !!")
     private String password;
 
 

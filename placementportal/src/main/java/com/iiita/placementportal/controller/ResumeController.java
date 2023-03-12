@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -19,7 +20,7 @@ public class ResumeController {
 
     //CREATE
     @PostMapping("/{user_email}")
-    public ResponseEntity<ResumeDto> createResume(@RequestBody ResumeDto resumeDto,@PathVariable("user_email") String userEmail){
+    public ResponseEntity<ResumeDto> createResume(@RequestBody @Valid ResumeDto resumeDto, @PathVariable("user_email") String userEmail){
         ResumeDto createdResumeDto = this.resumeService.createResume(resumeDto,userEmail);
         return new ResponseEntity<>(createdResumeDto, HttpStatus.CREATED);
     }
@@ -27,7 +28,7 @@ public class ResumeController {
 
     //UPDATE
     @PutMapping("/{user_email}")
-    public ResponseEntity<ResumeDto> updateResume(@RequestBody ResumeDto resumeDto,@PathVariable("user_email") String userEmail){
+    public ResponseEntity<ResumeDto> updateResume(@RequestBody @Valid ResumeDto resumeDto,@PathVariable("user_email") String userEmail){
         ResumeDto updatedResumeDto = this.resumeService.updateResume(resumeDto,userEmail);
         return new ResponseEntity<>(updatedResumeDto, HttpStatus.OK);
     }

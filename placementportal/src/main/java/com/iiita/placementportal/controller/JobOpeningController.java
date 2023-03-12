@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -17,13 +18,13 @@ public class JobOpeningController {
     private JobOpeningService jobOpeningService;
 
     @PostMapping("/")
-    public ResponseEntity<JobOpeningDto> createJobOpening(@RequestBody JobOpeningDto jobOpeningDto){
+    public ResponseEntity<JobOpeningDto> createJobOpening(@RequestBody @Valid JobOpeningDto jobOpeningDto){
         JobOpeningDto createdJobOpening = this.jobOpeningService.createJobOpening(jobOpeningDto);
         return new ResponseEntity<>(createdJobOpening, HttpStatus.CREATED);
     }
 
     @PutMapping("/{job_id}")
-    public ResponseEntity<JobOpeningDto> updateJobOpening(@RequestBody JobOpeningDto jobOpeningDto,@PathVariable("job_id") Long jobId){
+    public ResponseEntity<JobOpeningDto> updateJobOpening(@RequestBody @Valid JobOpeningDto jobOpeningDto,@PathVariable("job_id") Long jobId){
         JobOpeningDto updatedJobOpening = this.jobOpeningService.updateJobOpening(jobOpeningDto,jobId);
         return new ResponseEntity<>(updatedJobOpening, HttpStatus.OK);
     }

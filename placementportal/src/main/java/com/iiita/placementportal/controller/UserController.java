@@ -13,6 +13,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
+import javax.validation.Valid;
+import javax.validation.constraints.Email;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,28 +27,28 @@ public class UserController {
 
     //CREATE
     @PostMapping("/")
-    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto){
+    public ResponseEntity<UserDto> createUser(@RequestBody @Valid UserDto userDto){
         UserDto createdUserDto = this.userService.createUser(userDto);
         return new ResponseEntity<>(createdUserDto,HttpStatus.CREATED);
     }
 
     //UPDATE
     @PutMapping("/{user_email}")
-    public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto,@PathVariable("user_email") String email){
+    public ResponseEntity<UserDto> updateUser(@RequestBody @Valid UserDto userDto,@PathVariable("user_email") String email){
         UserDto updatedUserDto = this.userService.updateUser(userDto,email);
         return new ResponseEntity<>(updatedUserDto,HttpStatus.OK);
     }
 
     //DELETE
     @DeleteMapping("/{user_email}")
-    public ResponseEntity<?> deleteUser(@PathVariable("user_email") String email){
+    public ResponseEntity<?> deleteUser(@PathVariable("user_email")  String email){
         this.userService.deleteUser(email);
         return ResponseEntity.ok().build();
     }
 
     //GET single user
     @GetMapping("/{user_email}")
-    public ResponseEntity<UserDto> getSingleUser(@PathVariable("user_email") String email){
+    public ResponseEntity<UserDto> getSingleUser(@PathVariable("user_email")  String email){
         UserDto singleUserDto = this.userService.getSingleUser(email);
         return new ResponseEntity<>(singleUserDto,HttpStatus.OK);
     }

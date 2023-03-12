@@ -9,6 +9,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -17,8 +20,11 @@ import java.util.List;
 @AllArgsConstructor
 public class JobApplicationDto {
     private Long id;
+    @NotNull
     private ApplicationStatus status;
+    @Valid
     private UserDto user;
+    @Valid
     private JobOpeningDto jobOpening;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -20,21 +21,14 @@ public class JobApplicationController {
 
     //CREATE
     @PostMapping("/")
-    public ResponseEntity<?> createJobApplication(@RequestBody JobApplicationDto jobApplicationDto){
-      //  try{
+    public ResponseEntity<?> createJobApplication(@RequestBody @Valid JobApplicationDto jobApplicationDto){
             JobApplicationDto createdJobApplication = this.jobApplicationService.createJobApplication(jobApplicationDto);
             return new ResponseEntity<>(createdJobApplication, HttpStatus.CREATED);
-    //    }
-//        catch (AlreadyExistsException e){
-//            return new ResponseEntity<>(new ApiResponse(e.getMessage(),false),HttpStatus.BAD_REQUEST);
-//        }
-
-
     }
 
     //UPDATE
     @PutMapping("/{application_id}")
-    public ResponseEntity<JobApplicationDto> updateJobApplication(@RequestBody JobApplicationDto jobApplicationDto, @PathVariable("application_id")Long applicationId){
+    public ResponseEntity<JobApplicationDto> updateJobApplication(@RequestBody @Valid JobApplicationDto jobApplicationDto, @PathVariable("application_id")Long applicationId){
         JobApplicationDto updatedJobApplication = this.jobApplicationService.updateJobApplication(jobApplicationDto,applicationId);
         return new ResponseEntity<>(updatedJobApplication, HttpStatus.OK);
     }

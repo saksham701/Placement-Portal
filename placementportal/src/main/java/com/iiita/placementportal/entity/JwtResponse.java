@@ -1,18 +1,20 @@
 package com.iiita.placementportal.entity;
 
-public class JwtResponse {
-    private User user;
+import com.iiita.placementportal.dtos.UserDto;
 
-    public JwtResponse(User user, String jwtToken) {
+public class JwtResponse {
+    private UserDto user;
+
+    public JwtResponse(UserDto user, String jwtToken) {
         this.user = user;
         this.jwtToken = jwtToken;
     }
 
-    public User getUser() {
+    public UserDto getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserDto user) {
         this.user = user;
     }
 

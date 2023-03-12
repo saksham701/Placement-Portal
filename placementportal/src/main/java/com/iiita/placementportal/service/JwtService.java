@@ -1,10 +1,12 @@
 package com.iiita.placementportal.service;
 
 import com.iiita.placementportal.dao.UserDao;
+import com.iiita.placementportal.dtos.UserDto;
 import com.iiita.placementportal.entity.JwtRequest;
 import com.iiita.placementportal.entity.JwtResponse;
 import com.iiita.placementportal.entity.User;
 import com.iiita.placementportal.util.JwtUtil;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -26,6 +28,9 @@ public class JwtService implements UserDetailsService {
     private UserDao userDao;
     @Autowired
     private JwtUtil jwtUtil;
+
+    @Autowired
+    private ModelMapper modelMapper;
     @Autowired
     private AuthenticationManager authenticationManager;
 
@@ -39,7 +44,7 @@ public class JwtService implements UserDetailsService {
          String newGeneratedToken = jwtUtil.generateToken(userDetails);
          User user =  userDao.findById(userDetails.getUsername()).get();
 
-         return new JwtResponse(user,newGeneratedToken);
+         return new JwtResponse(this.modelMapper.map(user,UserDto.class),newGeneratedToken);
     }
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

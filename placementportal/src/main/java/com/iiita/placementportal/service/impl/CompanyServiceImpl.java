@@ -3,6 +3,7 @@ package com.iiita.placementportal.service.impl;
 import com.iiita.placementportal.dao.CompanyDao;
 import com.iiita.placementportal.dtos.CompanyDto;
 import com.iiita.placementportal.entity.Company;
+import com.iiita.placementportal.exceptions.ResourceNotFoundException;
 import com.iiita.placementportal.service.CompanyService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public CompanyDto updateCompany(CompanyDto companyDto, Long companyId) {
        Company company = this.companyDao.findById(companyId).orElseThrow(()
-               -> new RuntimeException("Company Doesn't exist"));
+               -> new ResourceNotFoundException("Company","companyId",companyId.toString()));
        company.setCompanyName(companyDto.getCompanyName());
 //       company.setCompanyOpenings(companyDto.getCompanyOpenings());
        Company updatedCompany = this.companyDao.save(company);
@@ -37,14 +38,14 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public void deleteCompany(Long companyId) {
         Company company = this.companyDao.findById(companyId).orElseThrow(()
-                -> new RuntimeException("Company Doesn't exist"));
+                -> new ResourceNotFoundException("Company","companyId",companyId.toString()));
         this.companyDao.delete(company);
     }
 
     @Override
     public CompanyDto getSingleCompany(Long companyId) {
         Company company = this.companyDao.findById(companyId).orElseThrow(()
-                -> new RuntimeException("Company Doesn't exist"));
+                -> new ResourceNotFoundException("Company","companyId",companyId.toString()));
         return this.modelMapper.map(company,CompanyDto.class);
     }
 

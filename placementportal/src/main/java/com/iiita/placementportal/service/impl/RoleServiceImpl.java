@@ -2,6 +2,7 @@ package com.iiita.placementportal.service.impl;
 
 import com.iiita.placementportal.dao.RoleDao;
 import com.iiita.placementportal.entity.Role;
+import com.iiita.placementportal.exceptions.ResourceNotFoundException;
 import com.iiita.placementportal.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public void deleteRole(String roleName) {
-        Role role = this.roleDao.findById(roleName).orElseThrow(()->new RuntimeException("role doesn't exist"));
+        Role role = this.roleDao.findById(roleName).orElseThrow(()->new ResourceNotFoundException("Role","Role Name",roleName));
         this.roleDao.delete(role);
     }
 

@@ -5,6 +5,7 @@ import com.iiita.placementportal.dao.UserDao;
 import com.iiita.placementportal.dtos.ResumeDto;
 import com.iiita.placementportal.entity.Resume;
 import com.iiita.placementportal.entity.User;
+import com.iiita.placementportal.exceptions.ResourceNotFoundException;
 import com.iiita.placementportal.service.ResumeService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class ResumeServiceImpl implements ResumeService {
     @Override
     public ResumeDto createResume(ResumeDto resumeDto,String userEmail) {
         Resume createdResume =  this.resumeDao.save(this.modelMapper.map(resumeDto, Resume.class));
-        User user = this.userDao.findById(userEmail).orElseThrow(()->new RuntimeException("User doesn't exist"));
+        User user = this.userDao.findById(userEmail).orElseThrow(()->new ResourceNotFoundException("User","Email",userEmail));
         user.setResume(createdResume);
         this.userDao.save(user);
         return this.modelMapper.map(createdResume,ResumeDto.class);
@@ -62,7 +63,7 @@ public class ResumeServiceImpl implements ResumeService {
             return userOptional.get().getResume();
         }
         else{
-            throw new RuntimeException("User doesn't exist");
+            throw new ResourceNotFoundException("User","Email",userEmail);
         }
     }
 
@@ -70,7 +71,7 @@ public class ResumeServiceImpl implements ResumeService {
     public void deleteResume(String userEmail) {
         //fetch resume from userEmail
         Resume resume = getResumeFromUserEmail(userEmail);
-        User user = this.userDao.findById(userEmail).orElseThrow(()->new RuntimeException("User doesn't exist"));
+        User user = this.userDao.findById(userEmail).orElseThrow(()->new ResourceNotFoundException("User","Email",userEmail));
         user.setResume(null);
         this.userDao.save(user);
         this.resumeDao.delete(resume);

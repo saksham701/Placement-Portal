@@ -6,6 +6,7 @@ import com.iiita.placementportal.dtos.JobOpeningDto;
 import com.iiita.placementportal.entity.Company;
 import com.iiita.placementportal.entity.JobOpening;
 import com.iiita.placementportal.entity.User;
+import com.iiita.placementportal.exceptions.ResourceNotFoundException;
 import com.iiita.placementportal.service.JobOpeningService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class JobOpeningServiceImpl implements JobOpeningService {
 
     @Override
     public JobOpeningDto updateJobOpening(JobOpeningDto jobOpeningDto, Long jobId) {
-        JobOpening jobOpening = this.jobOpeningDao.findById(jobId).orElseThrow(()->new RuntimeException("Job opening with this jobid doesn't exist"));
+        JobOpening jobOpening = this.jobOpeningDao.findById(jobId).orElseThrow(()->new ResourceNotFoundException("Job Opening","jobId",jobId.toString()));
         jobOpening.setJobProfile(jobOpeningDto.getJobProfile());
         jobOpening.setJobDescription(jobOpeningDto.getJobDescription());
         jobOpening.setCompany(this.modelMapper.map(jobOpeningDto.getCompany(),Company.class));
@@ -43,13 +44,13 @@ public class JobOpeningServiceImpl implements JobOpeningService {
 
     @Override
     public void deleteJobOpening(Long jobId) {
-        JobOpening jobOpening = this.jobOpeningDao.findById(jobId).orElseThrow(()->new RuntimeException("Job opening with this jobid doesn't exist"));
+        JobOpening jobOpening = this.jobOpeningDao.findById(jobId).orElseThrow(()->new ResourceNotFoundException("Job Opening","jobId",jobId.toString()));
         this.jobOpeningDao.delete(jobOpening);
     }
 
     @Override
     public JobOpeningDto getJobOpening(Long jobId) {
-        JobOpening jobOpening = this.jobOpeningDao.findById(jobId).orElseThrow(()->new RuntimeException("Job opening with this jobid doesn't exist"));
+        JobOpening jobOpening = this.jobOpeningDao.findById(jobId).orElseThrow(()->new ResourceNotFoundException("Job Opening","jobId",jobId.toString()));
         return this.modelMapper.map(jobOpening,JobOpeningDto.class);
     }
 

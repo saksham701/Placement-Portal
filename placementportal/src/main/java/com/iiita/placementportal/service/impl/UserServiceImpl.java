@@ -3,6 +3,7 @@ package com.iiita.placementportal.service.impl;
 import com.iiita.placementportal.dao.UserDao;
 import com.iiita.placementportal.dtos.UserDto;
 import com.iiita.placementportal.entity.User;
+import com.iiita.placementportal.exceptions.ResourceNotFoundException;
 import com.iiita.placementportal.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto updateUser(UserDto userDto, String email) {
-        User user = this.userDao.findById(email).orElseThrow(()->new RuntimeException("User doesnt exist"));
+        User user = this.userDao.findById(email).orElseThrow(()->new ResourceNotFoundException("User","Email",email));
         user.setEmail(userDto.getEmail());
         user.setPassword(userDto.getPassword());
         user.setRole(userDto.getRole());
@@ -36,13 +37,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(String email) {
-        User user = this.userDao.findById(email).orElseThrow(()->new RuntimeException("User doesnt exist"));
+        User user = this.userDao.findById(email).orElseThrow(()->new ResourceNotFoundException("User","Email",email));
         this.userDao.delete(user);
     }
 
     @Override
     public UserDto getSingleUser(String email) {
-        User user = this.userDao.findById(email).orElseThrow(()->new RuntimeException("User doesnt exist"));
+        User user = this.userDao.findById(email).orElseThrow(()->new ResourceNotFoundException("User","Email",email));
         return this.modelMapper.map(user,UserDto.class);
     }
 

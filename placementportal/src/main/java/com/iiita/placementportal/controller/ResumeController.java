@@ -50,7 +50,7 @@ public class ResumeController {
 
 
     //GET ALL USER's RESUME
-    @GetMapping("/")
+    @GetMapping("/all")
     public ResponseEntity<List<ResumeDto>> getAllUserResume(){
         List<ResumeDto> allResumeDtos = this.resumeService.getAllUserResume();
         return new ResponseEntity<>(allResumeDtos,HttpStatus.OK);

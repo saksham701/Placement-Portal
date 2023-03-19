@@ -41,6 +41,9 @@ public class User{
     @OneToOne(cascade = CascadeType.ALL)
     private Resume resume;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    private RegisterKey registerKey;
+
     @OneToMany(mappedBy = "user")
     private List<JobOpening> postedJobOpenings = new ArrayList<>();
 

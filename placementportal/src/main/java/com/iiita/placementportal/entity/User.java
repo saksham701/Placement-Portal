@@ -49,4 +49,14 @@ public class User{
 
     @OneToMany(mappedBy = "user")
     private List<JobApplication> jobApplications = new ArrayList<>();
+
+    private String name;
+
+    private String college;
+
+    private String phoneNumber;
+
+    private String rollNo;
+
+    private Boolean placedStatus;
 }

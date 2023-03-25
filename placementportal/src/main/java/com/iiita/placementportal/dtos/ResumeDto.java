@@ -22,7 +22,10 @@ public class ResumeDto {
     private String address;
 
     @NotEmpty
-    private String workExperience;
+    private List<String> workExperience;
+
+    @NotEmpty
+    private List<String> socialProfiles;
 
     @NotEmpty
     private String phoneNumber;

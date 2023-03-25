@@ -36,6 +36,18 @@ public class UserServiceImpl implements UserService {
         user.setEmail(userDto.getEmail());
         user.setPassword(getEncodedPassword(userDto.getPassword()));
         user.setRole(userDto.getRole());
+        if(userDto.getPlacedStatus() != null){
+            user.setPlacedStatus(userDto.getPlacedStatus());
+        }
+        if(userDto.getCollege()!=null){
+            user.setCollege(userDto.getCollege());
+        }
+        if(userDto.getName()!=null){
+            user.setName(userDto.getName());
+        }
+        if(userDto.getRollNo()!=null){
+            user.setRollNo(user.getRollNo());
+        }
         User updatedUser = this.userDao.save(user);
         return this.modelMapper.map(updatedUser,UserDto.class);
     }

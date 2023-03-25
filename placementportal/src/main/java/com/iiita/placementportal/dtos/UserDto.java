@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.iiita.placementportal.entity.RegisterKey;
 import com.iiita.placementportal.entity.Resume;
 import com.iiita.placementportal.entity.Role;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,10 +12,8 @@ import lombok.Setter;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -36,6 +33,14 @@ public class UserDto {
     private LocalDateTime updatedAt;
     private Resume resume;
     private RegisterKey registerKey;
+    private String name;
+
+    private String college;
+
+    private String phoneNumber;
+
+    private String rollNo;
+    private Boolean placedStatus;
 
 
     @JsonIgnore

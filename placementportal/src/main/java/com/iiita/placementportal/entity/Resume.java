@@ -25,7 +25,11 @@ public class Resume {
 
     private String address;
 
-    private String workExperience;
+    @ElementCollection(targetClass = String.class)
+    private List<String> workExperience;
+
+    @ElementCollection(targetClass = String.class)
+    private List<String> socialProfiles;
 
     private String phoneNumber;
 

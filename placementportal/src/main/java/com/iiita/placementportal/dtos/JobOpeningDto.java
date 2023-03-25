@@ -26,7 +26,6 @@ public class JobOpeningDto {
     private String jobDescription;
     @NotEmpty
     private String jobProfile;
-    @Valid
     private UserDto user;
 //    private List<JobApplicationDto> receivedApplications;
     private LocalDateTime createdAt;

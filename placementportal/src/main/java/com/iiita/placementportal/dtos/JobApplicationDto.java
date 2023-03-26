@@ -22,7 +22,6 @@ public class JobApplicationDto {
     private Long id;
     @NotNull
     private ApplicationStatus status;
-    @Valid
     private UserDto user;
     @Valid
     private JobOpeningDto jobOpening;

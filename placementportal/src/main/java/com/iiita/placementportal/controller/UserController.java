@@ -60,6 +60,12 @@ public class UserController {
         return new ResponseEntity<>(allUsersDto,HttpStatus.OK);
     }
 
+    @PostMapping("/make_mod/{user_email}")
+    public ResponseEntity<?> makeUserModerator(@PathVariable("user_email") String email){
+        this.userService.makeModerator(email);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 //    @GetMapping("/forAdmin")
 //    @PreAuthorize("hasRole('ADMIN')")
 //    public String forAdmin(){

@@ -28,6 +28,8 @@ public interface UserService {
     UserDto getSingleUser(String email);
 
     List<UserDto> getAllUsers();
+
+    void makeModerator(String email);
 //    @Autowired
 //    private UserDao userDao;
 //

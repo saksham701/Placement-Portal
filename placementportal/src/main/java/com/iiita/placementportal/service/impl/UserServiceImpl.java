@@ -2,6 +2,7 @@ package com.iiita.placementportal.service.impl;
 
 import com.iiita.placementportal.dao.UserDao;
 import com.iiita.placementportal.dtos.UserDto;
+import com.iiita.placementportal.entity.Role;
 import com.iiita.placementportal.entity.User;
 import com.iiita.placementportal.exceptions.ResourceNotFoundException;
 import com.iiita.placementportal.service.UserService;
@@ -10,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -68,6 +71,15 @@ public class UserServiceImpl implements UserService {
     public List<UserDto> getAllUsers() {
         List<User> allUsers = (List<User>) this.userDao.findAll();
         return allUsers.stream().map((user -> this.modelMapper.map(user,UserDto.class))).collect(Collectors.toList());
+    }
+
+    @Override
+    public void makeModerator(String email) {
+        User user = this.userDao.findById(email).orElseThrow(()->new ResourceNotFoundException("User","Email",email));
+        Role role = new Role();
+        role.setRoleName("MODERATOR");
+        user.setRole(new ArrayList<>(Arrays.asList(role)));
+        this.userDao.save(user);
     }
 
     public String getEncodedPassword(String password){

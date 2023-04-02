@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
     public UserDto updateUser(UserDto userDto, String email) {
         User user = this.userDao.findById(email).orElseThrow(()->new ResourceNotFoundException("User","Email",email));
         user.setEmail(userDto.getEmail());
-        user.setPassword(getEncodedPassword(userDto.getPassword()));
+//        user.setPassword(getEncodedPassword(userDto.getPassword()));
         user.setRole(userDto.getRole());
         if(userDto.getPlacedStatus() != null){
             user.setPlacedStatus(userDto.getPlacedStatus());
@@ -49,7 +49,10 @@ public class UserServiceImpl implements UserService {
             user.setName(userDto.getName());
         }
         if(userDto.getRollNo()!=null){
-            user.setRollNo(user.getRollNo());
+            user.setRollNo(userDto.getRollNo());
+        }
+        if(userDto.getPhoneNumber()!=null){
+            user.setPhoneNumber(userDto.getPhoneNumber());
         }
         User updatedUser = this.userDao.save(user);
         return this.modelMapper.map(updatedUser,UserDto.class);

@@ -72,4 +72,10 @@ public class JobApplicationController {
         List<JobApplicationDto> allJobApplicationForUser = this.jobApplicationService.getAllJobApplicationForUser(userEmail);
         return new ResponseEntity<>(allJobApplicationForUser,HttpStatus.OK);
     }
+
+    @GetMapping("/search/{query}")
+    public ResponseEntity<List<JobApplicationDto>>  getMatchingJobApplications(@PathVariable("query")String query){
+        List<JobApplicationDto> matched = this.jobApplicationService.searchJobApplications(query);
+        return new ResponseEntity<>(matched,HttpStatus.OK);
+    }
 }

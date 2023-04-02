@@ -12,7 +12,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -76,5 +79,24 @@ public class JobApplicationServiceImpl implements JobApplicationService {
     public List<JobApplicationDto> getAllJobApplicationForJobOpening(Long jobId) {
         List<JobApplication> allJobApplications = (List<JobApplication>) this.jobApplicationDao.findAll();
         return allJobApplications.stream().filter((jobApplication) -> jobId.equals(jobApplication.getJobOpening().getId())).map((jobApplication) -> this.modelMapper.map(jobApplication, JobApplicationDto.class)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<JobApplicationDto> searchJobApplications(String query) {
+        List<JobApplication> l1 = this.jobApplicationDao.getMatchingJobDescriptionLike(query,query.toLowerCase(),query.toUpperCase());
+
+        List<JobApplication> l2 = this.jobApplicationDao.getMatchingJobProfileLike(query,query.toLowerCase(),query.toUpperCase());
+      //  List<JobApplication> l3 = this.jobApplicationDao.getMatchingStatusLike(query,query.toLowerCase(),query.toUpperCase());
+        List<JobApplication> l4 = this.jobApplicationDao.getMatchingCompanyLike(query,query.toLowerCase(),query.toUpperCase());
+        List<JobApplication> l5 = this.jobApplicationDao.getMatchingUserLike(query,query.toLowerCase(),query.toUpperCase());
+        Set<JobApplicationDto> matched = new HashSet<>();
+        l1.forEach(l->matched.add(this.modelMapper.map(l,JobApplicationDto.class)));
+        l2.forEach(l->matched.add(this.modelMapper.map(l,JobApplicationDto.class)));
+        l4.forEach(l->matched.add(this.modelMapper.map(l,JobApplicationDto.class)));
+        l5.forEach(l->matched.add(this.modelMapper.map(l,JobApplicationDto.class)));
+        List<JobApplicationDto> resp = new ArrayList<>(matched);
+        return resp;
+//        System.out.println("hello");
+//        return  null;
     }
 }

@@ -19,5 +19,7 @@ public interface JobOpeningService {
 
     List<JobOpeningDto> getAllJobOpeningForCompany(Long companyId);
 
+    List<JobOpeningDto> getAllJobOpeningForSearch(String query);
+
 
 }

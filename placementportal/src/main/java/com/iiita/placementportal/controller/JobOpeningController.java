@@ -59,6 +59,12 @@ public class JobOpeningController {
         return new ResponseEntity<>(allJobOpeningDtoForCompany,HttpStatus.OK);
     }
 
+    @GetMapping("/search/{query}")
+    public  ResponseEntity<List<JobOpeningDto>> getJobOpeningsBasedOnSearchQuery(@PathVariable("query")String query){
+        List<JobOpeningDto> allMatchedJobOpenings = this.jobOpeningService.getAllJobOpeningForSearch(query);
+        return new ResponseEntity<>(allMatchedJobOpenings,HttpStatus.OK);
+    }
+
 
 
 

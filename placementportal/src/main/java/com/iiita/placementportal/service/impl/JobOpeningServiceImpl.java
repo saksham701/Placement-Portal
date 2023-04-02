@@ -12,7 +12,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -70,5 +70,21 @@ public class JobOpeningServiceImpl implements JobOpeningService {
     public List<JobOpeningDto> getAllJobOpeningForCompany(Long companyId) {
         List<JobOpening> allJobOpenings = (List<JobOpening>) this.jobOpeningDao.findAll();
         return allJobOpenings.stream().filter(jobOpening -> companyId == jobOpening.getCompany().getId()).map((jobOpening)->this.modelMapper.map(jobOpening,JobOpeningDto.class)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<JobOpeningDto> getAllJobOpeningForSearch(String query) {
+        Set<JobOpeningDto> matched = new HashSet<>();
+        List<JobOpening> l1 = this.jobOpeningDao.getJobProfileLike(query,query.toUpperCase(),query.toLowerCase());
+        List<JobOpening> l2 = this.jobOpeningDao.getJobDescriptionLike(query,query.toUpperCase(),query.toLowerCase());
+        List<JobOpening> l3 = this.jobOpeningDao.getCompanyLike(query,query.toUpperCase(),query.toLowerCase());
+        List<JobOpening> l4 = this.jobOpeningDao.getPostedUserLike(query,query.toLowerCase(),query.toUpperCase());
+        l1.forEach(l->matched.add(this.modelMapper.map(l,JobOpeningDto.class)));
+        l2.forEach(l->matched.add(this.modelMapper.map(l,JobOpeningDto.class)));
+        l3.forEach(l->matched.add(this.modelMapper.map(l,JobOpeningDto.class)));
+        l4.forEach(l->matched.add(this.modelMapper.map(l,JobOpeningDto.class)));
+        System.out.println("hello");
+        List<JobOpeningDto> resp = new ArrayList<>(matched);
+        return resp;
     }
 }

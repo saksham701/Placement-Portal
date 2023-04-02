@@ -20,4 +20,6 @@ public interface JobApplicationService {
     List<JobApplicationDto> getAllJobApplicationForUser(String userEmail);
 
     List<JobApplicationDto> getAllJobApplicationForJobOpening(Long jobId);
+
+    List<JobApplicationDto> searchJobApplications(String query);
 }

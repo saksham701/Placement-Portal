@@ -52,6 +52,7 @@ public class ResumeServiceImpl implements ResumeService {
         oldResume.setProjects(resumeDto.getProjects());
         oldResume.setEducation(resumeDto.getEducation());
         oldResume.setAddress(resumeDto.getAddress());
+        oldResume.setSocialProfiles(resumeDto.getSocialProfiles());
 
         //save
         return this.modelMapper.map(this.resumeDao.save(oldResume),ResumeDto.class);

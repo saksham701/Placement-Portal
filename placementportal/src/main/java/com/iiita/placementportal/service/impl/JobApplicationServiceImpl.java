@@ -89,12 +89,15 @@ public class JobApplicationServiceImpl implements JobApplicationService {
       //  List<JobApplication> l3 = this.jobApplicationDao.getMatchingStatusLike(query,query.toLowerCase(),query.toUpperCase());
         List<JobApplication> l4 = this.jobApplicationDao.getMatchingCompanyLike(query,query.toLowerCase(),query.toUpperCase());
         List<JobApplication> l5 = this.jobApplicationDao.getMatchingUserLike(query,query.toLowerCase(),query.toUpperCase());
-        Set<JobApplicationDto> matched = new HashSet<>();
-        l1.forEach(l->matched.add(this.modelMapper.map(l,JobApplicationDto.class)));
-        l2.forEach(l->matched.add(this.modelMapper.map(l,JobApplicationDto.class)));
-        l4.forEach(l->matched.add(this.modelMapper.map(l,JobApplicationDto.class)));
-        l5.forEach(l->matched.add(this.modelMapper.map(l,JobApplicationDto.class)));
-        List<JobApplicationDto> resp = new ArrayList<>(matched);
+        Set<Long> matched = new HashSet<>();
+        l1.forEach(l->matched.add(l.getId()));
+        l2.forEach(l->matched.add(l.getId()));
+        l4.forEach(l->matched.add(l.getId()));
+        l5.forEach(l->matched.add(l.getId()));
+        List<JobApplicationDto> resp = new ArrayList<>();
+        for(Long id:matched){
+            resp.add(this.modelMapper.map(this.jobApplicationDao.findById(id),JobApplicationDto.class));
+        }
         return resp;
 //        System.out.println("hello");
 //        return  null;

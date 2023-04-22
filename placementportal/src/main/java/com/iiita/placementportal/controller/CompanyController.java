@@ -1,6 +1,7 @@
 package com.iiita.placementportal.controller;
 
 import com.iiita.placementportal.dtos.CompanyDto;
+import com.iiita.placementportal.dtos.StatDto;
 import com.iiita.placementportal.dtos.UserDto;
 import com.iiita.placementportal.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/company")
@@ -49,5 +52,19 @@ public class CompanyController {
     public ResponseEntity<List<CompanyDto>> getAllCompany(){
         List<CompanyDto> allCompanyDto = this.companyService.getAllCompany();
         return new ResponseEntity<>(allCompanyDto,HttpStatus.OK);
+    }
+
+    @GetMapping("/stats")
+    public ResponseEntity<List<StatDto>> getCompanyStats(){
+        Map<String,Long> getCompanyStats = this.companyService.getPlacementStats();
+        List<StatDto> ap = new ArrayList<>();
+        for(String s:getCompanyStats.keySet()){
+            StatDto st = new StatDto();
+            st.setCompanyName(s);
+            st.setCount(getCompanyStats.get(s));
+            ap.add(st);
+
+        }
+        return new ResponseEntity<>(ap,HttpStatus.OK);
     }
 }

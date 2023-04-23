@@ -8,10 +8,15 @@ import com.iiita.placementportal.entity.User;
 import com.iiita.placementportal.exceptions.AlreadyExistsException;
 import com.iiita.placementportal.exceptions.ResourceNotFoundException;
 import com.iiita.placementportal.service.JobApplicationService;
+import com.iiita.placementportal.util.ApplicationStatus;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -101,5 +106,52 @@ public class JobApplicationServiceImpl implements JobApplicationService {
         return resp;
 //        System.out.println("hello");
 //        return  null;
+    }
+
+    @Override
+    public void updateBatchStatus(MultipartFile file, Long jobId, String oldStatus, String newStatus) {
+        Set<String> emails = new HashSet<>();
+
+        try (Workbook workbook = WorkbookFactory.create(file.getInputStream())) {
+
+            Sheet sheet = workbook.getSheetAt(0); // assuming first sheet
+            for (Row row : sheet) {
+                Cell emailCell = row.getCell(0);
+                if (emailCell != null ) {
+                    String email = emailCell.getStringCellValue();
+                        emails.add(email);
+                }
+            }
+        } catch (IOException | InvalidFormatException e) {
+            e.printStackTrace();
+        }
+        List<JobApplicationDto> allApp = this.getAllJobApplicationForJobOpening(jobId);
+        allApp.stream().filter(app->app.getStatus().toString().equals(oldStatus));
+        for(JobApplicationDto app:allApp){
+            if(emails.contains(app.getUser().getEmail())){
+                if(newStatus.equals("APPLIED")){
+                    app.setStatus(ApplicationStatus.APPLIED);
+                }
+                else if(newStatus.equals("SHORTLISTED")){
+                    app.setStatus(ApplicationStatus.SHORTLISTED);
+                }
+                else if(newStatus.equals("INTERVIEWING")){
+                    app.setStatus(ApplicationStatus.INTERVIEWING);
+                }
+                else if(newStatus.equals("SELECTED")){
+                    app.setStatus(ApplicationStatus.SELECTED);
+                }
+                else{
+                    app.setStatus(ApplicationStatus.REJECTED);
+                }
+                this.updateJobApplication(app,app.getId());
+            }
+            else{
+                app.setStatus(ApplicationStatus.REJECTED);
+                this.updateJobApplication(app,app.getId());
+            }
+        }
+        System.out.println("hello");
+
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -77,5 +78,11 @@ public class JobApplicationController {
     public ResponseEntity<List<JobApplicationDto>>  getMatchingJobApplications(@PathVariable("query")String query){
         List<JobApplicationDto> matched = this.jobApplicationService.searchJobApplications(query);
         return new ResponseEntity<>(matched,HttpStatus.OK);
+    }
+
+    @PostMapping("/update/status/batch/{job_id}/{old_status}/{new_status}")
+    public ResponseEntity<?> updateBatchStatus(@RequestParam("excelFile") MultipartFile file,@PathVariable("job_id")Long jobId,@PathVariable("old_status") String oldStatus,@PathVariable("new_status")String newStatus){
+        this.jobApplicationService.updateBatchStatus(file,jobId,oldStatus,newStatus);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

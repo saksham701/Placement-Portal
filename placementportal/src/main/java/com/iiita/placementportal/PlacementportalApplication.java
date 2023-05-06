@@ -36,7 +36,7 @@ public class PlacementportalApplication {
 		));
 		InterviewSchdeuler.schedule(interviewPlanList, mp);
 
-//		SpringApplication.run(PlacementportalApplication.class, args);
+		SpringApplication.run(PlacementportalApplication.class, args);
 
 	}
 	@Bean

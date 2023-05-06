@@ -44,15 +44,15 @@ public class InterviewSchdeuler {
 
     }
 
-    static class Schedule{
-        Integer interviewerID;
-        Interval interval;
-
-        public Schedule(Integer interviewerID, Interval interval) {
-            this.interviewerID = interviewerID;
-            this.interval = interval;
-        }
-    }
+//    static class Schedule{
+//        Integer interviewerID;
+//        Interval interval;
+//
+//        public Schedule(Integer interviewerID, Interval interval) {
+//            this.interviewerID = interviewerID;
+//            this.interval = interval;
+//        }
+//    }
     public static Map<String, Schedule> scheduleHelper(
             List<InterviewPlan> interviewPlanList,
             Map<String, List<Interval>> studentsAvailableIntervals
@@ -230,7 +230,7 @@ public class InterviewSchdeuler {
         return schedule;
     }
 
-    public static void schedule(
+    public static Map<String, Schedule> schedule(
             List<InterviewPlan> interviewPlanList,
             Map<String, List<Interval>> studentsPreScheduledInterviews
     ){
@@ -241,25 +241,26 @@ public class InterviewSchdeuler {
         for(InterviewPlan ip : interviewPlanList){
             plans.add(ip.getInterval());
         }
-
         for(String studentId : studentsPreScheduledInterviews.keySet()){
             studentsAvailableIntervals.put(studentId, invertIntervals(studentsPreScheduledInterviews.get(studentId), plans));
         }
+
 //        System.out.println("\n\nSuccess");
 //        for(Interval interval:studentsAvailableIntervals.get("rana")){
 //            System.out.println(interval.getStart() + " " + interval.getEnd());
 //        }
-        System.out.println(studentsAvailableIntervals);
+//        System.out.println(studentsAvailableIntervals);
 //       NOTE - TODO - THIS is the final answer = student id, schedule - interviewer id, interval of interview..
-        Map<String, Schedule> schedule = scheduleHelper(interviewPlanList, studentsAvailableIntervals);
-        for(String student : schedule.keySet()){
-            System.out.println("STUDENT : " + student);
-            Schedule obj = schedule.get(student);
-            System.out.println("INTERVIEWER " + obj.interviewerID);
-            System.out.println("INTERVAL " + obj.interval.getStart() + " " + obj.interval.getEnd());
-        }
+        Map<String, Schedule> finalSchedule = scheduleHelper(interviewPlanList, studentsAvailableIntervals);
+//        for(String student : finalSchedule.keySet()){
+//            System.out.println("STUDENT : " + student);
+//            Schedule obj = finalSchedule.get(student);
+//            System.out.println("INTERVIEWER " + obj.interviewerID);
+//            System.out.println("INTERVAL " + obj.interval.getStart() + " " + obj.interval.getEnd());
+//        }
         // DO SOMETHING NOW FOR SCHEDULING, can be done but how can we do this
         // TODO - CREATE POSSIBLE RESPONSE WHICH CAN BE SEND OVER - ALGOrithm is done
+        return finalSchedule;
     }
 }
 

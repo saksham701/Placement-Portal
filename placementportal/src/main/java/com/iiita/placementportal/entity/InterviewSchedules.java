@@ -27,5 +27,6 @@ public class InterviewSchedules {
     private LocalDateTime start;
     private LocalDateTime end;
     private Integer interviewerId;
+    private String jobId;
 
 }

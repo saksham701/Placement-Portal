@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class InterviewSchdeulesServiceImpl implements InterviewSchedulesService {
@@ -32,8 +33,8 @@ public class InterviewSchdeulesServiceImpl implements InterviewSchedulesService 
         Map<String, List<Interval>> studentsPreScheduledInterviews = new HashMap<>();
         // shortlisted students
         List<JobApplicationDto> jobApplications = jobApplicationService.getAllJobApplicationForJobOpening(Long.parseLong(jobID));
-        jobApplications.stream().filter(job -> job.getStatus().toString().equals("SHORTLISTED"));
-        for(JobApplicationDto jobApplicationDto : jobApplications){
+        List<JobApplicationDto>filt = jobApplications.stream().filter(job -> job.getStatus().toString().equals("SHORTLISTED")).collect(Collectors.toList());
+        for(JobApplicationDto jobApplicationDto : filt){
             String email = jobApplicationDto.getUser().getEmail().toString();
             List<InterviewSchedules> interviewSchedules = interviewSchedulesDao.getStudentsInterviewSchedules(email);
             List<Interval> intervals = new ArrayList<>();
@@ -56,9 +57,10 @@ public class InterviewSchdeulesServiceImpl implements InterviewSchedulesService 
     }
 
     @Override
-    public void saveSchedules(SaveSchdeulesRequestDto saveSchdeulesRequestDto) {
+    public void saveSchedules(SaveSchdeulesRequestDto saveSchdeulesRequestDto,String jobId) {
         for(InterviewSchedulesResponseDto schedule : saveSchdeulesRequestDto.getScheduleList()){
           InterviewSchedules is = new InterviewSchedules();
+          is.setJobId(jobId);
           is.setInterviewerId(schedule.getInterviewerId());
           is.setStudentEmail(schedule.getStudentEmail());
           is.setDate(schedule.getStart().toLocalDate());
@@ -68,5 +70,12 @@ public class InterviewSchdeulesServiceImpl implements InterviewSchedulesService 
           interviewSchedulesDao.save(is);
 
         }
+    }
+
+    public List<InterviewSchedules> getMyInterviews(String email){
+        List<InterviewSchedules> interviewSchedules  =(List<InterviewSchedules>) this.interviewSchedulesDao.findAll();
+        List<InterviewSchedules> mySched = interviewSchedules.stream().filter(interviewSchedules1 -> interviewSchedules1.getStudentEmail().toString().equals(email)).collect(Collectors.toList());
+        return mySched;
+
     }
 }
